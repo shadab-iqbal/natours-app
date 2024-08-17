@@ -21,6 +21,14 @@ const handleValidationErrorDB = err => {
   return new AppError(message, 400);
 };
 
+const handleJWTError = err => {
+  return new AppError('Invalid token. Please log in again!', 401);
+};
+
+const handleJWTExpiredError = err => {
+  return new AppError('Your token has expired! Please log in again.', 401);
+};
+
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -53,6 +61,16 @@ module.exports = (err, req, res, next) => {
     // when the data doesn't pass the validation of the schema
     else if (err.name === 'ValidationError') {
       err = handleValidationErrorDB(err);
+    }
+
+    // when the JWT token is invalid
+    else if (err.name === 'JsonWebTokenError') {
+      err = handleJWTError(err);
+    }
+
+    // when the JWT token has expired
+    else if (err.name === 'TokenExpiredError') {
+      err = handleJWTExpiredError(err);
     }
 
     // if the error is an instance of the AppError class

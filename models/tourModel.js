@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 const { isAscii } = require('validator');
@@ -6,8 +7,8 @@ const tourSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      unique: true,
       required: [true, 'A tour must have a name'],
+      unique: true,
       trim: true,
       maxlength: [40, 'A tour name must have less or equal than 40 characters'],
       minlength: [10, 'A tour name must have more or equal than 10 characters'],

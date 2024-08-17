@@ -1,32 +1,36 @@
 const express = require('express');
+
 const tourController = require('./../controllers/tourController');
+const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
-// router.param('id', tourController.checkID);
+// Route for '/top-5-cheap'
+router.get(
+  '/top-5-cheap',
+  tourController.aliasTopTours,
+  tourController.getAllTours
+);
 
-router
-  .route('/top-5-cheap')
-  .get(tourController.aliasTopTours, tourController.getAllTours);
-// the following is another approach for route aliasing, produces the same result
-// .get((req, res) => {
-//   res.redirect(
-//     '/api/v1/tours?limit=5&sort=-ratingsAverage,price&fields=name,price,ratingsAverage,summary,difficulty'
-//   );
-// });
+// Route for '/tour-stats'
+router.get('/tour-stats', tourController.getTourStats);
 
-router.route('/tour-stats').get(tourController.getTourStats);
-router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
+// Route for '/monthly-plan/:year'
+router.get('/monthly-plan/:year', tourController.getMonthlyPlan);
 
 router
   .route('/')
-  .get(tourController.getAllTours)
+  .get(authController.isAuthenticated, tourController.getAllTours)
   .post(tourController.createTour);
 
 router
   .route('/:id')
   .get(tourController.getTour)
-  .patch(tourController.updateTour)
+  .patch(
+    authController.isAuthenticated,
+    authController.isAuthorized(['admin', 'lead-guide']),
+    tourController.updateTour
+  )
   .delete(tourController.deleteTour);
 
 module.exports = router;
