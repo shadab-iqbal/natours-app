@@ -12,6 +12,12 @@ router.post('/login', authController.login);
 router.post('/forget-password', authController.forgetPassword);
 router.post('/reset-password/:token', authController.resetPassword);
 
+router.post(
+  '/update-password',
+  authController.isAuthenticated,
+  authController.updatePassword
+);
+
 // routes for admin
 router
   .route('/')

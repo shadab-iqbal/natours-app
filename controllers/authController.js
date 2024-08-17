@@ -216,3 +216,38 @@ exports.resetPassword = async (req, res, next) => {
     token: newToken
   });
 };
+
+exports.updatePassword = async (req, res, next) => {
+  const { currentPassword, newPassword, newPasswordConfirm } = req.body;
+
+  try {
+    // fetching the user's current password
+    const user = await User.findById(req.user.id).select('+password');
+
+    // checking if current password matches with db saved password
+    if (
+      !currentPassword ||
+      !(await user.isPasswordCorrect(currentPassword, user.password))
+    ) {
+      return next(new AppError('Incorrect current password', 401));
+    }
+
+    // updating the password
+    user.password = newPassword;
+    user.passwordConfirm = newPasswordConfirm;
+
+    // update password change time and save the user
+    user.passwordChangedAt = Date.now();
+    await user.save();
+
+    // log the user in and send the JWT
+    const newToken = signToken(user.id);
+
+    res.status(201).json({
+      status: 'success',
+      token: newToken
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
