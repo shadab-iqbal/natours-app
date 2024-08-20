@@ -47,7 +47,7 @@ exports.updateAuthenticatedUser = async (req, res, next) => {
   }
 };
 
-exports.deleteAuthenticatedUser = async (req, res, next) => {
+exports.deactivateAuthenticatedUser = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.user.id, { active: false });
 

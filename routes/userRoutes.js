@@ -27,7 +27,7 @@ router.patch(
 router.delete(
   '/deactivate-account',
   authController.isAuthenticated,
-  userController.deleteAuthenticatedUser
+  userController.deactivateAuthenticatedUser
 );
 
 // routes for admin

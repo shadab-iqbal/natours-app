@@ -29,6 +29,13 @@ const handleJWTExpiredError = err => {
   return new AppError('Your token has expired! Please log in again.', 401);
 };
 
+const handleLargePayloadError = err => {
+  return new AppError(
+    'The request payload is too large. Please limit the size of the payload!',
+    413
+  );
+};
+
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -71,6 +78,11 @@ module.exports = (err, req, res, next) => {
     // when the JWT token has expired
     else if (err.name === 'TokenExpiredError') {
       err = handleJWTExpiredError(err);
+    }
+
+    // when the payload is too large
+    else if (err.name === 'PayloadTooLargeError') {
+      err = handleLargePayloadError(err);
     }
 
     // if the error is an instance of the AppError class

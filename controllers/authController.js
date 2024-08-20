@@ -69,16 +69,20 @@ exports.isAuthenticated = async (req, res, next) => {
   try {
     let token;
 
-    // check if there is any authorization property in the headers
-    // and if it starts with 'Bearer'
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer')
-    ) {
-      token = req.headers.authorization.split(' ')[1];
+    // Authorization Header is another way to send the token
+    // if (
+    //   req.headers.authorization &&
+    //   req.headers.authorization.startsWith('Bearer')
+    // ) {
+    //   token = req.headers.authorization.split(' ')[1];
+    // }
+
+    // check if a cookie with the name 'jwt' exists
+    if (req.cookies && req.cookies.jwt) {
+      token = req.cookies.jwt;
     }
 
-    // check if the token can be found in the headers
+    // check if the token is available
     if (!token) {
       return next(
         new AppError('You are not logged in. Please log in again!', 401)
