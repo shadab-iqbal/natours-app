@@ -31,8 +31,8 @@ const tourSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A tour must have a difficulty'],
       enum: {
-        values: ['easy', 'medium', 'difficult'],
-        message: 'Difficulty must be: easy, medium, difficult'
+        values: ['easy', 'medium', 'hard'],
+        message: 'Difficulty must be: easy, medium, hard'
       }
     },
     ratingsAverage: {
@@ -126,7 +126,7 @@ tourSchema.pre(/^find/, function(next) {
 });
 
 tourSchema.post(/^find/, function(docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
+  console.log(`\nQuery took ${Date.now() - this.start} milliseconds!\n`);
 
   next();
 });

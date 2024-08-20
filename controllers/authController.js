@@ -52,13 +52,19 @@ exports.login = async (req, res, next) => {
     ) {
       return next(new AppError('Incorrect email or password', 401));
     }
+    // remove the password before sending the response
+    user.password = undefined;
+    user.passwordChangedAt = undefined;
 
     const token = signToken(user.id);
     createCookie(res, token);
 
     res.status(200).json({
       status: 'success',
-      token
+      token,
+      data: {
+        user
+      }
     });
   } catch (err) {
     return next(err);
