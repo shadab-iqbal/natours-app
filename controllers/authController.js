@@ -5,24 +5,26 @@ const crypto = require('crypto');
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 const sendEmail = require('./../utils/sendEmail');
-
-const signToken = id => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN
-  });
-};
+const { signToken, createCookie } = require('./../utils/authHelper');
 
 exports.signup = async (req, res, next) => {
+  if (req.body.role) {
+    return next(new AppError('You are not allowed to specify a role', 400));
+  }
+
   try {
     const newUser = await User.create({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
-      role: req.body.role
+      passwordConfirm: req.body.passwordConfirm
+      // role: req.body.role
     });
+    // remove the password before sending the response
+    newUser.password = undefined;
 
     const token = signToken(newUser.id);
+    createCookie(res, token);
 
     res.status(201).json({
       status: 'success',
@@ -52,8 +54,9 @@ exports.login = async (req, res, next) => {
     }
 
     const token = signToken(user.id);
+    createCookie(res, token);
 
-    res.status(201).json({
+    res.status(200).json({
       status: 'success',
       token
     });
@@ -109,7 +112,7 @@ exports.isAuthenticated = async (req, res, next) => {
 };
 
 exports.isAuthorized = authorizedRoles => {
-  console.log(authorizedRoles);
+  // console.log(authorizedRoles);
 
   return (req, res, next) => {
     if (!authorizedRoles.includes(req.user.role)) {
@@ -151,7 +154,7 @@ exports.forgetPassword = async (req, res, next) => {
       });
 
       // send a success response
-      res.status(201).json({
+      res.status(200).json({
         status: 'success',
         message: `Token sent to email successfully`
       });
@@ -162,6 +165,7 @@ exports.forgetPassword = async (req, res, next) => {
 
       await user.save();
 
+      // eslint-disable-next-line no-console
       console.log({ err });
 
       return next(
@@ -210,8 +214,9 @@ exports.resetPassword = async (req, res, next) => {
 
   // log the user in and send the JWT
   const newToken = signToken(user.id);
+  createCookie(res, newToken);
 
-  res.status(201).json({
+  res.status(200).json({
     status: 'success',
     token: newToken
   });
@@ -242,8 +247,9 @@ exports.updatePassword = async (req, res, next) => {
 
     // log the user in and send the JWT
     const newToken = signToken(user.id);
+    createCookie(res, newToken);
 
-    res.status(201).json({
+    res.status(200).json({
       status: 'success',
       token: newToken
     });

@@ -12,10 +12,22 @@ router.post('/login', authController.login);
 router.post('/forget-password', authController.forgetPassword);
 router.post('/reset-password/:token', authController.resetPassword);
 
-router.post(
+router.patch(
   '/update-password',
   authController.isAuthenticated,
   authController.updatePassword
+);
+
+router.patch(
+  '/update-profile',
+  authController.isAuthenticated,
+  userController.updateAuthenticatedUser
+);
+
+router.delete(
+  '/deactivate-account',
+  authController.isAuthenticated,
+  userController.deleteAuthenticatedUser
 );
 
 // routes for admin
