@@ -46,10 +46,10 @@ app.use(mongoSanitize());
 // Sanitize data against XSS attacks
 app.use(xss());
 
-// Prevent HTTP Parameter Pollution
+// Prevent HTTP Parameter Pollution (keep only the last value for each parameter)
 app.use(
   hpp({
-    // Allow duplicate query parameters for the following fields
+    // values of the following parameters will be in an array
     whitelist: [
       'duration',
       'ratingsQuantity',
