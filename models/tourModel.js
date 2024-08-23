@@ -3,6 +3,28 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 const { isAscii } = require('validator');
 
+const locationSchema = new mongoose.Schema({
+  // GeoJSON data
+  type: {
+    type: String,
+    default: 'Point',
+    enum: {
+      values: ['Point'],
+      message: 'Location type must be Point'
+    }
+  },
+  coordinates: {
+    type: [Number],
+    required: [true, 'A location must have coordinates']
+  },
+  address: {
+    type: String
+  },
+  description: {
+    type: String
+  }
+});
+
 const tourSchema = new mongoose.Schema(
   {
     name: {
@@ -91,7 +113,21 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
       select: false
-    }
+    },
+    startLocation: {
+      type: locationSchema,
+      required: [true, 'A tour must have a start location']
+    },
+    locations: {
+      type: [locationSchema],
+      default: []
+    },
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
+    ]
   },
   {
     toObject: { virtuals: true },
@@ -101,6 +137,13 @@ const tourSchema = new mongoose.Schema(
 
 tourSchema.virtual('durationWeeks').get(function() {
   return this.duration / 7;
+});
+
+// Virtual populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id',
+  foreignField: 'reviewFor'
 });
 
 // DOCUMENT MIDDLEWARE: runs BEFORE .save() and .create()
@@ -120,6 +163,12 @@ tourSchema.post('save', function(doc, next) {
 // QUERY MIDDLEWARE: runs for all find queries
 tourSchema.pre(/^find/, function(next) {
   this.find({ secretTour: { $ne: true } });
+
+  this.populate({
+    path: 'guides', // Populate the guides field
+    select: '-passwordChangedAt -__v' // Exclude the passwordChangedAt and __v fields
+  });
+
   this.start = Date.now();
 
   next();

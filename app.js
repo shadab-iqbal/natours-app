@@ -10,6 +10,7 @@ const xss = require('xss-clean');
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 const routeNotFoundHandler = require('./middlewares/routeNotFoundHandler');
 
@@ -67,6 +68,7 @@ app.use(express.static(`${__dirname}/public`));
 // API Routes
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 // Error Handling Middlewares
 app.all('*', routeNotFoundHandler); // Handle undefined routes
