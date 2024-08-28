@@ -2,8 +2,12 @@ const express = require('express');
 
 const tourController = require('./../controllers/tourController');
 const authController = require('./../controllers/authController');
+const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
+
+// Route for /:tourId/reviews
+router.use('/:tourId/reviews', reviewRouter);
 
 // Route for '/top-5-cheap'
 router.get(
