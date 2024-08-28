@@ -75,14 +75,6 @@ exports.isAuthenticated = async (req, res, next) => {
   try {
     let token;
 
-    // Authorization Header is another way to send the token
-    // if (
-    //   req.headers.authorization &&
-    //   req.headers.authorization.startsWith('Bearer')
-    // ) {
-    //   token = req.headers.authorization.split(' ')[1];
-    // }
-
     // check if a cookie with the name 'jwt' exists
     if (req.cookies && req.cookies.jwt) {
       token = req.cookies.jwt;

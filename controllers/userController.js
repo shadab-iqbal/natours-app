@@ -1,22 +1,14 @@
 const User = require('./../models/userModel');
-
 const AppError = require('./../utils/appError');
+const controllerFactory = require('../utils/controllerFactory');
 
-exports.getAllUsers = async (req, res, next) => {
-  try {
-    const users = await User.find();
+exports.getUser = controllerFactory.getOne(User);
 
-    res.status(200).json({
-      status: 'success',
-      results: users.length,
-      data: {
-        users
-      }
-    });
-  } catch (err) {
-    return next(err);
-  }
-};
+exports.getAllUsers = controllerFactory.getAll(User);
+
+exports.updateUser = controllerFactory.updateOne(User);
+
+exports.deleteUser = controllerFactory.deleteOne(User);
 
 exports.updateAuthenticatedUser = async (req, res, next) => {
   // Check if the user is trying to update any field other than name and email
@@ -60,30 +52,9 @@ exports.deactivateAuthenticatedUser = async (req, res, next) => {
   }
 };
 
-exports.getUser = (req, res, next) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
-
 exports.createUser = (req, res, next) => {
   res.status(500).json({
     status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
-
-exports.updateUser = (req, res, next) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
-
-exports.deleteUser = (req, res, next) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
+    message: 'This route is not defined! Please use Signup instead!'
   });
 };

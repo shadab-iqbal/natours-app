@@ -1,37 +1,25 @@
 const Review = require('../models/reviewModel');
+const controllerFactory = require('../utils/controllerFactory');
 
-exports.getAllReviews = async (req, res, next) => {
-  const filter = req.params.tourId ? { tourId: req.params.tourId } : {};
+exports.getAllReviews = controllerFactory.getAll(Review);
 
-  try {
-    const reviews = await Review.find(filter);
+exports.getReview = controllerFactory.getOne(Review);
 
-    res.status(200).json({
-      status: 'success',
-      results: reviews.length,
-      data: {
-        reviews
-      }
-    });
-  } catch (err) {
-    return next(err);
-  }
+exports.createReview = controllerFactory.createOne(Review);
+
+exports.updateReview = controllerFactory.updateOne(Review);
+
+exports.deleteReview = controllerFactory.deleteOne(Review);
+
+// Middleware to set the filter options for the reviews
+exports.setFilterOptions = (req, res, next) => {
+  req.query.reviewFor = req.params.tourId || undefined;
+  return next();
 };
 
-exports.createReview = async (req, res, next) => {
+// Middleware to set the tour id and user id for the review
+exports.setTourUserIds = (req, res, next) => {
   req.body.reviewFor = req.body.reviewFor || req.params.tourId;
   req.body.reviewBy = req.body.reviewBy || req.user.id;
-
-  try {
-    const newReview = await Review.create(req.body);
-
-    res.status(201).json({
-      status: 'success',
-      data: {
-        review: newReview
-      }
-    });
-  } catch (err) {
-    return next(err);
-  }
+  return next();
 };
