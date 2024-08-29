@@ -14,6 +14,7 @@ exports.getAll = Model => {
         .paginate();
 
       const queryResult = await completeQuery.queryBuilder;
+      // const queryResult = await completeQuery.queryBuilder.explain();
 
       // SEND RESPONSE
       res.status(200).json({
