@@ -5,11 +5,13 @@ const authController = require('../controllers/authController');
 
 const router = express.Router({ mergeParams: true });
 
+// User needs to be authenticated to access the following routes
+router.use(authController.isAuthenticated);
+
 router
   .route('/')
   .get(reviewController.setFilterOptions, reviewController.getAllReviews)
   .post(
-    authController.isAuthenticated,
     authController.isAuthorized(['user']),
     reviewController.setTourUserIds,
     reviewController.createReview
@@ -18,7 +20,10 @@ router
 router
   .route('/:id')
   .get(reviewController.getReview)
-  .patch(reviewController.updateReview)
-  .delete(reviewController.deleteReview);
+  .patch(authController.isAuthorized(['user']), reviewController.updateReview)
+  .delete(
+    authController.isAuthorized(['user', 'admin']),
+    reviewController.deleteReview
+  );
 
 module.exports = router;

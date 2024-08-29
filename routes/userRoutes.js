@@ -12,30 +12,26 @@ router.post('/login', authController.login);
 router.post('/forget-password', authController.forgetPassword);
 router.post('/reset-password/:token', authController.resetPassword);
 
-router.patch(
-  '/update-password',
-  authController.isAuthenticated,
-  authController.updatePassword
-);
+// User needs to be authenticated to access the following routes
+router.use(authController.isAuthenticated);
+
+router.patch('/update-password', authController.updatePassword);
 
 router.get(
   '/my-profile',
-  authController.isAuthenticated,
   userController.getAuthenticatedUser,
   userController.getUser
 );
 
-router.patch(
-  '/update-profile',
-  authController.isAuthenticated,
-  userController.updateAuthenticatedUser
-);
+router.patch('/update-profile', userController.updateAuthenticatedUser);
 
 router.delete(
   '/deactivate-account',
-  authController.isAuthenticated,
   userController.deactivateAuthenticatedUser
 );
+
+// User needs to be admin to access the following routes
+router.use(authController.isAuthorized(['admin']));
 
 // routes for admin
 router
