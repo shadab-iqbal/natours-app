@@ -2,13 +2,10 @@ const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 const controllerFactory = require('../utils/controllerFactory');
 
-exports.getUser = controllerFactory.getOne(User);
-
-exports.getAllUsers = controllerFactory.getAll(User);
-
-exports.updateUser = controllerFactory.updateOne(User);
-
-exports.deleteUser = controllerFactory.deleteOne(User);
+exports.getAuthenticatedUser = (req, res, next) => {
+  req.params.id = req.user.id;
+  return next();
+};
 
 exports.updateAuthenticatedUser = async (req, res, next) => {
   // Check if the user is trying to update any field other than name and email
@@ -58,3 +55,9 @@ exports.createUser = (req, res, next) => {
     message: 'This route is not defined! Please use Signup instead!'
   });
 };
+
+// the following functions are for admin only
+exports.getUser = controllerFactory.getOne(User);
+exports.getAllUsers = controllerFactory.getAll(User);
+exports.updateUser = controllerFactory.updateOne(User);
+exports.deleteUser = controllerFactory.deleteOne(User);

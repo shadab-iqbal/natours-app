@@ -18,6 +18,13 @@ router.patch(
   authController.updatePassword
 );
 
+router.get(
+  '/my-profile',
+  authController.isAuthenticated,
+  userController.getAuthenticatedUser,
+  userController.getUser
+);
+
 router.patch(
   '/update-profile',
   authController.isAuthenticated,
