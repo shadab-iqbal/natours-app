@@ -35,6 +35,8 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+reviewSchema.index({ reviewFor: 1, reviewBy: 1 }, { unique: true });
+
 reviewSchema.pre(/^find/, function(next) {
   this.populate([
     {
@@ -77,13 +79,13 @@ reviewSchema.statics.calcAverageRatings = async function(tourId) {
   }
 };
 
-reviewSchema.post('save', function(doc, next) {
-  doc.constructor.calcAverageRatings(this.reviewFor);
+reviewSchema.post('save', async function(doc, next) {
+  await doc.constructor.calcAverageRatings(this.reviewFor);
   return next();
 });
 
-reviewSchema.post(/^findOneAnd/, function(doc, next) {
-  doc.constructor.calcAverageRatings(doc.reviewFor);
+reviewSchema.post(/^findOneAnd/, async function(doc, next) {
+  await doc.constructor.calcAverageRatings(doc.reviewFor);
   return next();
 });
 
