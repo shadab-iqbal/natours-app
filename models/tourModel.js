@@ -138,8 +138,12 @@ const tourSchema = new mongoose.Schema(
 
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 
+// 2dsphere indexing is only for geospatial queries
+tourSchema.index({ startLocation: '2dsphere' });
+
 tourSchema.virtual('durationWeeks').get(function() {
-  return this.duration / 7;
+  const val = this.duration / 7;
+  return Math.round(val * 10) / 10;
 });
 
 // Virtual populate
@@ -184,9 +188,16 @@ tourSchema.post(/^find/, function(docs, next) {
 });
 
 tourSchema.pre('aggregate', function(next) {
+  // Check if the first stage in the pipeline is $geoNear
+  if (this.pipeline().length > 0 && this.pipeline()[0].$geoNear) {
+    return next(); // If it's a $geoNear stage, do not apply the $match stage
+  }
+
+  // If it's not a $geoNear stage, add the $match stage
   this.pipeline().unshift({
     $match: { secretTour: { $ne: true } }
   });
+
   this.startTime = new Date();
 
   next();

@@ -50,4 +50,13 @@ router.get(
   tourController.getMonthlyPlan
 );
 
+// will give tours within a certain distance from a certain point
+router.get(
+  '/tours-nearby/distance-km/:distance/center/:latlng',
+  tourController.getNearbyTours
+);
+
+// will give the distances of all tours from a certain point
+router.get('/tours-distances-km/:latlng', tourController.getTourDistances);
+
 module.exports = router;

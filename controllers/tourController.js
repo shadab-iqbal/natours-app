@@ -1,5 +1,7 @@
+/* eslint-disable no-restricted-globals */
 const Tour = require('./../models/tourModel');
 const controllerFactory = require('../utils/controllerFactory');
+const AppError = require('./../utils/appError');
 
 exports.getAllTours = controllerFactory.getAll(Tour);
 
@@ -99,6 +101,95 @@ exports.getMonthlyPlan = async (req, res, next) => {
       status: 'success',
       data: {
         plan
+      }
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+exports.getNearbyTours = async (req, res, next) => {
+  const { latlng, distance } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  if (!lat || !lng) {
+    return next(
+      new AppError(
+        'Please provide latitude and longitude in the format => lat,lng',
+        400
+      )
+    );
+  }
+
+  // Error if distance cannot be parsed as a number,
+  // or if distance is not a finite number (e.g., Infinity, -Infinity, or NaN).
+  if (isNaN(parseFloat(distance)) || !isFinite(distance)) {
+    return next(new AppError('Please provide a valid distance in km!', 400));
+  }
+
+  try {
+    // converting km to radian bc "geoWithin" query takes radian unit
+    const radius = distance / 6378.1;
+
+    const tours = await Tour.find({
+      startLocation: {
+        $geoWithin: {
+          $centerSphere: [[lng, lat], radius]
+        }
+      }
+    });
+
+    res.status(200).json({
+      status: 'success',
+      results: tours.length,
+      data: {
+        tours
+      }
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+exports.getTourDistances = async (req, res, next) => {
+  const { latlng } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  if (!lat || !lng) {
+    return next(
+      new AppError(
+        'Please provide latitude and longitude in the format => lat,lng',
+        400
+      )
+    );
+  }
+
+  try {
+    const distances = await Tour.aggregate([
+      {
+        $geoNear: {
+          // the point from which to calculate distances
+          near: {
+            type: 'Point',
+            coordinates: [+lng, +lat]
+          },
+          distanceField: 'distance', // field to add the calculated distance
+          distanceMultiplier: 0.001 // converting meters to km
+        }
+      },
+      // we only want the name and distance fields
+      {
+        $project: {
+          name: 1,
+          distance: 1
+        }
+      }
+    ]);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        distances
       }
     });
   } catch (err) {
