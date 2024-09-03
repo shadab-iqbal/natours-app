@@ -142,7 +142,9 @@ exports.forgetPassword = async (req, res, next) => {
     await user.save();
 
     // create the reset URL
-    const resetURL = `${process.env.BACKEND_BASE_URL}/api/v1/users/reset-password/${resetToken}`;
+    const resetURL = `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/users/reset-password/${resetToken}`;
 
     // create the message to be sent to the user
     const message = `Submit a PATCH req to ${resetURL} with the new password and passwordConfirm`;
