@@ -31,7 +31,10 @@ const limiter = rateLimit({
   windowMs: 60 * 60 * 1000, // within 1 hour
   message: 'Too many requests from this IP, please try again in an hour'
 });
-app.use('/api', limiter); // applicable to all routes starting with /api
+// Apply rate limiting only in development mode
+if (process.env.NODE_ENV === 'development') {
+  app.use('/api', limiter); // applicable to all routes starting with /api
+}
 
 // Enable logging of HTTP requests in the console when in development mode
 if (process.env.NODE_ENV === 'development') {
