@@ -6,11 +6,13 @@ exports.signToken = id => {
   });
 };
 
-exports.createCookie = (res, payload) => {
+exports.createCookie = (res, payload, customExpiresInMs) => {
+  const expiresIn =
+    customExpiresInMs ??
+    process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000; // Default expiration
+
   const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
+    expires: new Date(Date.now() + expiresIn),
     httpOnly: true, // cookie cannot be accessed or modified by the browser
     sameSite: 'strict', // cookie can only be sent in a first-party context
     secure: process.env.NODE_ENV === 'production' // cookie can only be sent over HTTPS
