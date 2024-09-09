@@ -2,6 +2,8 @@ const express = require('express');
 
 const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
+const fileUpload = require('./../middlewares/fileUpload');
+const processUploadedFile = require('./../middlewares/processUploadedFile');
 
 const router = express.Router();
 
@@ -24,7 +26,12 @@ router.get(
   userController.getUser
 );
 
-router.patch('/update-profile', userController.updateAuthenticatedUser);
+router.patch(
+  '/update-profile',
+  fileUpload.single('photo'),
+  processUploadedFile,
+  userController.updateAuthenticatedUser
+);
 
 router.delete(
   '/deactivate-account',

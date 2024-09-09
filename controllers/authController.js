@@ -73,8 +73,8 @@ exports.login = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
   try {
-    // create a cookie with the name 'LoggedOut' and set it to expire in 10 ms
-    createCookie(res, 'LoggedOut', 10);
+    // create a cookie with the name 'LoggedOut' and set it to expire in 1s
+    createCookie(res, 'LoggedOut', 1000);
 
     res.status(200).json({
       status: 'success',

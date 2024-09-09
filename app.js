@@ -41,8 +41,14 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Parse incoming JSON requests and populate req.body with the parsed data
-app.use(express.json({ limit: '10kb' })); // limit the payload to 10kb
+// Parse incoming JSON requests and populate req.body with the parsed data.
+// Limits the JSON payload size to 10KB to prevent large data inputs.
+app.use(express.json({ limit: '10kb' }));
+
+// Parse incoming URL-encoded form data (from form submissions),
+// and populate req.body with the parsed data. Limits the payload size to 10KB.
+// The 'extended: true' option allows parsing of rich data structures (like arrays and objects).
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // Sanitize data against NoSQL query injection
 app.use(mongoSanitize());

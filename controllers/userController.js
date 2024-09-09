@@ -20,6 +20,11 @@ exports.updateAuthenticatedUser = async (req, res, next) => {
     );
   }
 
+  // Check if the user is trying to update the photo
+  if (req.file) {
+    req.body.photo = req.file.filename;
+  }
+
   // now update the user info
   try {
     const user = await User.findByIdAndUpdate(req.user.id, req.body, {

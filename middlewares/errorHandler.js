@@ -72,17 +72,30 @@ module.exports = (err, req, res, next) => {
 
     // when the JWT token is invalid
     else if (err.name === 'JsonWebTokenError') {
-      err = handleJWTError(err);
+      err = new AppError('Invalid token. Please log in again!', 401);
     }
 
     // when the JWT token has expired
     else if (err.name === 'TokenExpiredError') {
-      err = handleJWTExpiredError(err);
+      err = new AppError('Your token has expired! Please log in again.', 401);
     }
 
     // when the payload is too large
     else if (err.name === 'PayloadTooLargeError') {
-      err = handleLargePayloadError(err);
+      err = new AppError(
+        'The request payload is too large. Please limit the size of the payload!',
+        413
+      );
+    }
+
+    // when the error is a Multer error
+    else if (err.name === 'MulterError') {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        err = new AppError('File size must be under 5 MB!', 413);
+      }
+      //  else if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+      //   err = new AppError('Only 1 image is allowed!', 400);
+      // }
     }
 
     // if the error is an instance of the AppError class
