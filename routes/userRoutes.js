@@ -29,7 +29,7 @@ router.get(
 router.patch(
   '/update-profile',
   fileUpload.single('photo'),
-  processUploadedFile,
+  processUploadedFile.processUserImage,
   userController.updateAuthenticatedUser
 );
 

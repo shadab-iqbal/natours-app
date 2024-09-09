@@ -21,21 +21,6 @@ const handleValidationErrorDB = err => {
   return new AppError(message, 400);
 };
 
-const handleJWTError = err => {
-  return new AppError('Invalid token. Please log in again!', 401);
-};
-
-const handleJWTExpiredError = err => {
-  return new AppError('Your token has expired! Please log in again.', 401);
-};
-
-const handleLargePayloadError = err => {
-  return new AppError(
-    'The request payload is too large. Please limit the size of the payload!',
-    413
-  );
-};
-
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -92,10 +77,12 @@ module.exports = (err, req, res, next) => {
     else if (err.name === 'MulterError') {
       if (err.code === 'LIMIT_FILE_SIZE') {
         err = new AppError('File size must be under 5 MB!', 413);
+      } else if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+        err = new AppError(
+          'Unexpected file uploaded or exceeded the number of files allowed!',
+          400
+        );
       }
-      //  else if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-      //   err = new AppError('Only 1 image is allowed!', 400);
-      // }
     }
 
     // if the error is an instance of the AppError class

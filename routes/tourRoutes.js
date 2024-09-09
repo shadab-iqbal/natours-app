@@ -3,6 +3,8 @@ const express = require('express');
 const tourController = require('./../controllers/tourController');
 const authController = require('./../controllers/authController');
 const reviewRouter = require('./reviewRoutes');
+const fileUpload = require('./../middlewares/fileUpload');
+const processUploadedFile = require('./../middlewares/processUploadedFile');
 
 const router = express.Router();
 
@@ -24,6 +26,11 @@ router
   .patch(
     authController.isAuthenticated,
     authController.isAuthorized(['admin', 'lead-guide']),
+    fileUpload.fields([
+      { name: 'imageCover', maxCount: 1 },
+      { name: 'images', maxCount: 3 }
+    ]),
+    processUploadedFile.processTourImages,
     tourController.updateTour
   )
   .delete(
