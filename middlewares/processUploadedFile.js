@@ -25,12 +25,10 @@ exports.processUserImage = async (req, res, next) => {
 };
 
 exports.processTourImages = async (req, res, next) => {
-  // console.log(req.files);
-
   if (!req.files) return next();
 
   try {
-    // 1. Process the cover image
+    // ------ Process the cover image ------ //
     const imageCoverFilename = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
 
     await sharp(req.files.imageCover[0].buffer)
@@ -40,8 +38,7 @@ exports.processTourImages = async (req, res, next) => {
 
     req.body.imageCover = imageCoverFilename;
 
-    // 2. Process the rest of the images
-
+    // ------ Process the rest of the images ------ //
     req.body.images = [];
 
     await Promise.all(
@@ -57,9 +54,7 @@ exports.processTourImages = async (req, res, next) => {
       })
     );
   } catch (err) {
-    return next(
-      new AppError('Error processing the images. Please try again!', 500)
-    );
+    return next(new AppError('Some images failed to upload!', 500));
   }
 
   return next();

@@ -4,7 +4,7 @@ const crypto = require('crypto');
 
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
-const sendEmail = require('./../utils/sendEmail');
+const Email = require('../utils/emailSender');
 const { signToken, createCookie } = require('./../utils/authHelper');
 
 exports.signup = async (req, res, next) => {
@@ -13,18 +13,20 @@ exports.signup = async (req, res, next) => {
   }
 
   try {
-    const newUser = await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm
-      // role: req.body.role
-    });
+    const newUser = await User.create(req.body);
+
     // remove the password before sending the response
     newUser.password = undefined;
 
     const token = signToken(newUser.id);
     createCookie(res, token);
+
+    const url = `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/users/update-profile`;
+
+    // not using await because we want to asynchronously send the welcome email
+    new Email(newUser, url).sendWelcome();
 
     res.status(201).json({
       status: 'success',
@@ -155,21 +157,13 @@ exports.forgetPassword = async (req, res, next) => {
     // save the password reset token and expiration time for that user
     await user.save();
 
-    // create the reset URL
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/users/reset-password/${resetToken}`;
-
-    // create the message to be sent to the user
-    const message = `Submit a PATCH req to ${resetURL} with the new password and passwordConfirm`;
-
-    // send the email
     try {
-      await sendEmail({
-        to: user.email,
-        subject: 'Your password reset token (valid for 10 minutes)',
-        text: message
-      });
+      // create the reset URL
+      const url = `${req.protocol}://${req.get(
+        'host'
+      )}/api/v1/users/reset-password/${resetToken}`;
+
+      await new Email(user, url).sendPasswordReset();
 
       // send a success response
       res.status(200).json({
@@ -202,42 +196,46 @@ exports.resetPassword = async (req, res, next) => {
   const { token } = req.params;
   const { password, passwordConfirm } = req.body;
 
-  // hashing the token before comparing it
-  const hashedToken = crypto
-    .createHash('sha256')
-    .update(token)
-    .digest('hex');
+  try {
+    // hashing the token before comparing it
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
 
-  // check if the token belongs to a user and it's not expired
-  const user = await User.findOne({
-    passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() }
-  });
+    // check if the token belongs to a user and it's not expired
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() }
+    });
 
-  if (!user) {
-    return next(new AppError('Token is invalid or has expired', 400));
+    if (!user) {
+      return next(new AppError('Token is invalid or has expired', 400));
+    }
+
+    // update the password and passwordConfirm fields
+    user.password = password;
+    user.passwordConfirm = passwordConfirm;
+
+    // reset the passwordResetToken and passwordResetExpires fields
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+
+    // update password change time and save the user
+    user.passwordChangedAt = Date.now();
+    await user.save();
+
+    // log the user in and send the JWT
+    const newToken = signToken(user.id);
+    createCookie(res, newToken);
+
+    res.status(200).json({
+      status: 'success',
+      token: newToken
+    });
+  } catch (err) {
+    return next(err);
   }
-
-  // update the password and passwordConfirm fields
-  user.password = password;
-  user.passwordConfirm = passwordConfirm;
-
-  // reset the passwordResetToken and passwordResetExpires fields
-  user.passwordResetToken = undefined;
-  user.passwordResetExpires = undefined;
-
-  // update password change time and save the user
-  user.passwordChangedAt = Date.now();
-  await user.save();
-
-  // log the user in and send the JWT
-  const newToken = signToken(user.id);
-  createCookie(res, newToken);
-
-  res.status(200).json({
-    status: 'success',
-    token: newToken
-  });
 };
 
 exports.updatePassword = async (req, res, next) => {
