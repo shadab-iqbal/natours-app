@@ -7,12 +7,12 @@ const mongoSanitize = require('express-mongo-sanitize');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const xss = require('xss-clean');
+const compression = require('compression');
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
-const bookingController = require('./controllers/bookingController');
 const stripeHandler = require('./middlewares/stripeHandler');
 const errorHandler = require('./middlewares/errorHandler');
 const routeNotFoundHandler = require('./middlewares/routeNotFoundHandler');
@@ -82,6 +82,9 @@ app.use(
     ]
   })
 );
+
+// Compress responses to reduce the size of the response body
+app.use(compression());
 
 // Serve static files from the "public" directory (e.g., images, CSS files, JavaScript files)
 app.use(express.static(`${__dirname}/public`));

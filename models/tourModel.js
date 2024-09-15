@@ -176,11 +176,11 @@ tourSchema.pre(/^find/, function(next) {
   next();
 });
 
-tourSchema.post(/^find/, function(docs, next) {
-  console.log(`\nQuery took ${Date.now() - this.start} milliseconds!\n`);
+// tourSchema.post(/^find/, function(docs, next) {
+//   console.log(`\nQuery took ${Date.now() - this.start} milliseconds!\n`);
 
-  next();
-});
+//   next();
+// });
 
 tourSchema.pre('aggregate', function(next) {
   // Check if the first stage in the pipeline is $geoNear
