@@ -32,26 +32,6 @@ app.use(cors());
 // Parse cookies attached to the client request
 app.use(cookieParser());
 
-// Apply rate limiting to prevent DOS attacks from the same IP
-const limiter = rateLimit({
-  max: 100, // max 100 requests
-  windowMs: 60 * 60 * 1000, // within 1 hour
-  message: 'Too many requests from this IP, please try again in an hour',
-  keyGenerator: req => {
-    // Use the 'x-forwarded-for' header to get the client's real IP
-    return req.headers['x-forwarded-for'] || req.ip;
-  }
-});
-// Apply rate limiting only in development mode
-// if (process.env.NODE_ENV === 'development') {
-app.use('/api', limiter); // applicable to all routes starting with /api
-// }
-
-// Enable logging of HTTP requests in the console when in development mode
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
-
 // Create a route for Stripe webhook events
 // The data needs to be in raw format for Stripe to process it
 // That is why we are keeping this endpoint before the express.json middleware
@@ -60,6 +40,25 @@ app.use(
   express.raw({ type: 'application/json' }),
   stripeHandler.handleStripeWebhook
 );
+
+// Apply rate limiting to prevent DOS attacks from the same IP
+const limiter = rateLimit({
+  max: 100, // max 100 requests
+  windowMs: 60 * 60 * 1000, // within 1 hour
+  message: 'Too many requests from this IP, please try again in an hour',
+  // keyGenerator allows us to define a custom function
+  // to generate the key to track request counts.
+  keyGenerator: req => {
+    // Use the 'x-forwarded-for' header to get the client's real IP
+    return req.headers['x-forwarded-for'] || req.ip;
+  }
+});
+app.use('/api', limiter); // applicable to all routes starting with /api
+
+// Enable logging of HTTP requests in the console when in development mode
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 // Parse incoming JSON requests and populate req.body with the parsed data.
 // Limits the JSON payload size to 10KB to prevent large data inputs.
