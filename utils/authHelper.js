@@ -6,7 +6,7 @@ exports.signToken = id => {
   });
 };
 
-exports.createCookie = (res, payload, customExpiresInMs) => {
+exports.createCookie = (req, res, payload, customExpiresInMs) => {
   const expiresIn =
     customExpiresInMs ??
     process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000; // Default expiration
@@ -15,7 +15,9 @@ exports.createCookie = (res, payload, customExpiresInMs) => {
     expires: new Date(Date.now() + expiresIn),
     httpOnly: true, // cookie cannot be accessed or modified by the browser
     sameSite: 'strict', // cookie can only be sent in a first-party context
-    secure: process.env.NODE_ENV === 'production' // cookie can only be sent over HTTPS
+    // cookie can only be sent over HTTPS
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
+    // secure: process.env.NODE_ENV === 'production'
   };
 
   res.cookie('jwt', payload, cookieOptions);

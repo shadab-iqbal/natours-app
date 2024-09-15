@@ -19,7 +19,7 @@ exports.signup = async (req, res, next) => {
     newUser.password = undefined;
 
     const token = signToken(newUser.id);
-    createCookie(res, token);
+    createCookie(req, res, token);
 
     const url = `${req.protocol}://${req.get(
       'host'
@@ -59,7 +59,7 @@ exports.login = async (req, res, next) => {
     user.passwordChangedAt = undefined;
 
     const token = signToken(user.id);
-    createCookie(res, token);
+    createCookie(req, res, token);
 
     res.status(200).json({
       status: 'success',
@@ -76,7 +76,7 @@ exports.login = async (req, res, next) => {
 exports.logout = async (req, res, next) => {
   try {
     // create a cookie with the name 'LoggedOut' and set it to expire in 1s
-    createCookie(res, 'LoggedOut', 1000);
+    createCookie(req, res, 'LoggedOut', 1000);
 
     res.status(200).json({
       status: 'success',
@@ -227,7 +227,7 @@ exports.resetPassword = async (req, res, next) => {
 
     // log the user in and send the JWT
     const newToken = signToken(user.id);
-    createCookie(res, newToken);
+    createCookie(req, res, newToken);
 
     res.status(200).json({
       status: 'success',
@@ -263,7 +263,7 @@ exports.updatePassword = async (req, res, next) => {
 
     // log the user in and send the JWT
     const newToken = signToken(user.id);
-    createCookie(res, newToken);
+    createCookie(req, res, newToken);
 
     res.status(200).json({
       status: 'success',

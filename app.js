@@ -19,6 +19,10 @@ const routeNotFoundHandler = require('./middlewares/routeNotFoundHandler');
 
 const app = express();
 
+// Helps Express correctly interpret headers like X-Forwarded-For and X-Forwarded-Proto
+// when our deployed app is behind a reverse proxy (e.g. Render, Heroku)
+app.enable('trust proxy');
+
 // Add security-related HTTP headers to the response
 app.use(helmet());
 
