@@ -100,12 +100,6 @@ const tourSchema = new mongoose.Schema(
       type: [String],
       default: []
     },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-      select: false,
-      immutable: true
-    },
     startDates: {
       type: [Date],
       default: []
@@ -131,6 +125,7 @@ const tourSchema = new mongoose.Schema(
     ]
   },
   {
+    timestamps: true,
     toObject: { virtuals: true },
     toJSON: { virtuals: true }
   }

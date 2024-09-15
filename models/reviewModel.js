@@ -14,10 +14,6 @@ const reviewSchema = new mongoose.Schema(
       min: [1, 'Rating must be at least 1'],
       max: [5, 'Rating must be at most 5']
     },
-    createdAt: {
-      type: Date,
-      default: Date.now()
-    },
     reviewFor: {
       type: mongoose.Schema.ObjectId,
       required: [true, 'A review must be for an existing reviewFor!'],
@@ -30,6 +26,7 @@ const reviewSchema = new mongoose.Schema(
     }
   },
   {
+    timestamps: true,
     toObject: { virtuals: true },
     toJSON: { virtuals: true }
   }

@@ -11,6 +11,8 @@ const xss = require('xss-clean');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./controllers/bookingController');
 const errorHandler = require('./middlewares/errorHandler');
 const routeNotFoundHandler = require('./middlewares/routeNotFoundHandler');
 
@@ -40,6 +42,15 @@ if (process.env.NODE_ENV === 'development') {
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+// Create a route for Stripe webhook events
+// The data needs to be in raw format for Stripe to process it
+// That is why we are keeping this endpoint before the express.json middleware
+app.use(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.handleStripeWebhook
+);
 
 // Parse incoming JSON requests and populate req.body with the parsed data.
 // Limits the JSON payload size to 10KB to prevent large data inputs.
@@ -78,6 +89,7 @@ app.use(express.static(`${__dirname}/public`));
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 // Error Handling Middlewares
 app.all('*', routeNotFoundHandler); // Handle undefined routes
