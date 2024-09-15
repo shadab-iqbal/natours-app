@@ -13,6 +13,7 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
 const bookingController = require('./controllers/bookingController');
+const stripeHandler = require('./middlewares/stripeHandler');
 const errorHandler = require('./middlewares/errorHandler');
 const routeNotFoundHandler = require('./middlewares/routeNotFoundHandler');
 
@@ -49,7 +50,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(
   '/webhook-checkout',
   express.raw({ type: 'application/json' }),
-  bookingController.handleStripeWebhook
+  stripeHandler.handleStripeWebhook
 );
 
 // Parse incoming JSON requests and populate req.body with the parsed data.
