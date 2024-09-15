@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const Tour = require('../models/tourModel');
@@ -5,11 +6,15 @@ const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
 
 const createBooking = async session => {
-  const tour = session.client_reference_id;
-  const user = (await User.findOne({ email: session.customer_email })).id;
-  const price = session.amount_total / 100;
+  try {
+    const tour = session.client_reference_id;
+    const user = (await User.findOne({ email: session.customer_email })).id;
+    const price = session.amount_total / 100;
 
-  await Booking.create({ tour, user, price });
+    await Booking.create({ tour, user, price });
+  } catch (error) {
+    console.log('FAILED TO CREATE BOOKING', error);
+  }
 };
 
 // Create a checkout session for the user to purchase a tour
@@ -71,12 +76,12 @@ exports.getCheckoutSession = async (req, res, next) => {
 exports.handleStripeWebhook = async (req, res, next) => {
   try {
     // Get the signature sent by Stripe
-    const sig = req.headers['stripe-signature'];
+    const stripeSignature = req.headers['stripe-signature'];
 
     // Verify that the event sent by Stripe is valid
     const event = stripe.webhooks.constructEvent(
       req.body,
-      sig,
+      stripeSignature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
 
