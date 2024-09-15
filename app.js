@@ -36,12 +36,16 @@ app.use(cookieParser());
 const limiter = rateLimit({
   max: 100, // max 100 requests
   windowMs: 60 * 60 * 1000, // within 1 hour
-  message: 'Too many requests from this IP, please try again in an hour'
+  message: 'Too many requests from this IP, please try again in an hour',
+  keyGenerator: req => {
+    // Use the 'x-forwarded-for' header to get the client's real IP
+    return req.headers['x-forwarded-for'] || req.ip;
+  }
 });
 // Apply rate limiting only in development mode
-if (process.env.NODE_ENV === 'development') {
-  app.use('/api', limiter); // applicable to all routes starting with /api
-}
+// if (process.env.NODE_ENV === 'development') {
+app.use('/api', limiter); // applicable to all routes starting with /api
+// }
 
 // Enable logging of HTTP requests in the console when in development mode
 if (process.env.NODE_ENV === 'development') {
