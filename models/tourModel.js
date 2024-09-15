@@ -141,7 +141,7 @@ tourSchema.virtual('durationWeeks').get(function() {
   return Math.round(val * 10) / 10;
 });
 
-// Virtual populate
+// Virtual populate (child referencing to reviews)
 tourSchema.virtual('reviews', {
   ref: 'Review',
   localField: '_id',

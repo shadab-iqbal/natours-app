@@ -73,6 +73,8 @@ exports.getCheckoutSession = async (req, res, next) => {
   }
 };
 
+// Validate the incoming webhook from Stripe and
+// create a booking in the database
 exports.handleStripeWebhook = async (req, res, next) => {
   try {
     // Get the signature sent by Stripe
@@ -96,6 +98,26 @@ exports.handleStripeWebhook = async (req, res, next) => {
 
     // Send a response to acknowledge that the event was received
     res.json({ received: true });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+// Get all bookings made by the currently authenticated user
+exports.getMyTours = async (req, res, next) => {
+  try {
+    const bookings = await Booking.find({ user: req.user.id });
+    const tourIds = bookings.map(booking => booking.tour);
+    // Get all tours that the user has booked
+    const tours = await Tour.find({ _id: { $in: tourIds } });
+
+    res.status(200).json({
+      status: 'success',
+      results: tours.length,
+      data: {
+        tours
+      }
+    });
   } catch (error) {
     return next(error);
   }

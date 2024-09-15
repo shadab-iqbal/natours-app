@@ -5,10 +5,17 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-router.get(
-  '/checkout-session/:tourId',
-  authController.isAuthenticated,
-  bookingController.getCheckoutSession
-);
+router.use(authController.isAuthenticated);
+
+router.get('/checkout-session/:tourId', bookingController.getCheckoutSession);
+
+router.get('/my-booked-tours', bookingController.getMyTours);
+
+router.use(authController.isAuthorized(['admin', 'lead-guide']));
+
+// router
+//   .route('/')
+//   .get(bookingController.getAllBookings)
+//   .post(bookingController.createBooking);
 
 module.exports = router;
