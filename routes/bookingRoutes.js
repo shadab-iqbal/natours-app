@@ -14,9 +14,15 @@ router.get('/my-booked-tours', bookingController.getMyTours);
 
 router.use(authController.isAuthorized(['admin', 'lead-guide']));
 
-// router
-//   .route('/')
-//   .get(bookingController.getAllBookings)
-//   .post(bookingController.createBooking);
+router
+  .route('/')
+  .get(bookingController.getAllBookings)
+  .post(bookingController.createBooking);
+
+router
+  .route('/:id')
+  .get(bookingController.getBooking)
+  .patch(bookingController.updateBooking)
+  .delete(bookingController.deleteBooking);
 
 module.exports = router;

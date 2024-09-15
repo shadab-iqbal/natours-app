@@ -1,6 +1,7 @@
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
+const controllerFactory = require('../utils/controllerFactory');
 
 exports.createBooking = async session => {
   try {
@@ -33,3 +34,9 @@ exports.getMyTours = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.getAllBookings = controllerFactory.getAll(Booking);
+exports.getBooking = controllerFactory.getOne(Booking);
+exports.createBooking = controllerFactory.createOne(Booking);
+exports.updateBooking = controllerFactory.updateOne(Booking);
+exports.deleteBooking = controllerFactory.deleteOne(Booking);
