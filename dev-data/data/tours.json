@@ -6,12 +6,22 @@
       "coordinates": [-80.185942, 25.774772],
       "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
     },
-
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 6,
     "images": ["tour-2-1.jpg", "tour-2-2.jpg", "tour-2-3.jpg"],
     "startDates": [
-      "2021-06-19T09:00:00.000Z",
-      "2021-07-20T09:00:00.000Z",
-      "2021-08-18T09:00:00.000Z"
+      {
+        "date": "2021-06-19T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-07-20T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-08-18T09:00:00.000Z",
+        "participants": 0
+      }
     ],
     "_id": "5c88fa8cf4afda39709c2955",
     "name": "The Sea Explorer",
@@ -61,12 +71,22 @@
       "coordinates": [-115.570154, 51.178456],
       "address": "224 Banff Ave, Banff, AB, Canada"
     },
-
+    "ratingsAverage": 5,
+    "ratingsQuantity": 9,
     "images": ["tour-1-1.jpg", "tour-1-2.jpg", "tour-1-3.jpg"],
     "startDates": [
-      "2021-04-25T09:00:00.000Z",
-      "2021-07-20T09:00:00.000Z",
-      "2021-10-05T09:00:00.000Z"
+      {
+        "date": "2021-04-25T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-07-20T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-10-05T09:00:00.000Z",
+        "participants": 0
+      }
     ],
     "_id": "5c88fa8cf4afda39709c2951",
     "name": "The Forest Hiker",
@@ -113,12 +133,22 @@
       "coordinates": [-106.822318, 39.190872],
       "address": "419 S Mill St, Aspen, CO 81611, USA"
     },
-
+    "ratingsAverage": 4.5,
+    "ratingsQuantity": 6,
     "images": ["tour-3-1.jpg", "tour-3-2.jpg", "tour-3-3.jpg"],
     "startDates": [
-      "2022-01-05T10:00:00.000Z",
-      "2022-02-12T10:00:00.000Z",
-      "2023-01-06T10:00:00.000Z"
+      {
+        "date": "2022-01-05T10:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2022-02-12T10:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2023-01-06T10:00:00.000Z",
+        "participants": 0
+      }
     ],
     "_id": "5c88fa8cf4afda39709c295a",
     "name": "The Snow Adventurer",
@@ -158,12 +188,22 @@
       "coordinates": [-115.172652, 36.110904],
       "address": "3663 S Las Vegas Blvd, Las Vegas, NV 89109, USA"
     },
-
+    "ratingsAverage": 4.7,
+    "ratingsQuantity": 7,
     "images": ["tour-5-1.jpg", "tour-5-2.jpg", "tour-5-3.jpg"],
     "startDates": [
-      "2021-08-05T09:00:00.000Z",
-      "2022-03-20T10:00:00.000Z",
-      "2022-08-12T09:00:00.000Z"
+      {
+        "date": "2021-08-05T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2022-03-20T10:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2022-08-12T09:00:00.000Z",
+        "participants": 0
+      }
     ],
     "_id": "5c88fa8cf4afda39709c2961",
     "name": "The Park Camper",
@@ -217,12 +257,22 @@
       "coordinates": [-73.985141, 40.75894],
       "address": "Manhattan, NY 10036, USA"
     },
-
+    "ratingsAverage": 4.6,
+    "ratingsQuantity": 5,
     "images": ["tour-4-1.jpg", "tour-4-2.jpg", "tour-4-3.jpg"],
     "startDates": [
-      "2021-03-11T10:00:00.000Z",
-      "2021-05-02T09:00:00.000Z",
-      "2021-06-09T09:00:00.000Z"
+      {
+        "date": "2021-03-11T10:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-05-02T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-06-09T09:00:00.000Z",
+        "participants": 0
+      }
     ],
     "_id": "5c88fa8cf4afda39709c295d",
     "name": "The City Wanderer",
@@ -265,12 +315,22 @@
       "coordinates": [-118.803461, 34.006072],
       "address": "29130 Cliffside Dr, Malibu, CA 90265, USA"
     },
-
+    "ratingsAverage": 3.9,
+    "ratingsQuantity": 7,
     "images": ["tour-6-1.jpg", "tour-6-2.jpg", "tour-6-3.jpg"],
     "startDates": [
-      "2021-07-19T09:00:00.000Z",
-      "2021-09-06T09:00:00.000Z",
-      "2022-03-18T10:00:00.000Z"
+      {
+        "date": "2021-07-19T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-09-06T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2022-03-18T10:00:00.000Z",
+        "participants": 0
+      }
     ],
     "_id": "5c88fa8cf4afda39709c2966",
     "name": "The Sports Lover",
@@ -331,12 +391,22 @@
       "coordinates": [-109.55099, 37.283469],
       "address": "Bluff, UT 84512, USA"
     },
-
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 6,
     "images": ["tour-8-1.jpg", "tour-8-2.jpg", "tour-8-3.jpg"],
     "startDates": [
-      "2021-03-23T10:00:00.000Z",
-      "2021-10-25T09:00:00.000Z",
-      "2022-01-30T10:00:00.000Z"
+      {
+        "date": "2021-03-23T10:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-10-25T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2022-01-30T10:00:00.000Z",
+        "participants": 0
+      }
     ],
     "_id": "5c88fa8cf4afda39709c2970",
     "name": "The Star Gazer",
@@ -379,12 +449,22 @@
       "coordinates": [-114.406097, 62.439943],
       "address": "Yellowknife, NT X1A 2L2, Canada"
     },
-
+    "ratingsAverage": 4.7,
+    "ratingsQuantity": 7,
     "images": ["tour-9-1.jpg", "tour-9-2.jpg", "tour-9-3.jpg"],
     "startDates": [
-      "2021-12-16T10:00:00.000Z",
-      "2022-01-16T10:00:00.000Z",
-      "2022-12-12T10:00:00.000Z"
+      {
+        "date": "2021-12-16T10:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2022-01-16T10:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2022-12-12T10:00:00.000Z",
+        "participants": 0
+      }
     ],
     "_id": "5c88fa8cf4afda39709c2974",
     "name": "The Northern Lights",
@@ -417,12 +497,22 @@
       "coordinates": [-122.29286, 38.294065],
       "address": "560 Jefferson St, Napa, CA 94559, USA"
     },
-
+    "ratingsAverage": 4.4,
+    "ratingsQuantity": 7,
     "images": ["tour-7-1.jpg", "tour-7-2.jpg", "tour-7-3.jpg"],
     "startDates": [
-      "2021-02-12T10:00:00.000Z",
-      "2021-04-14T09:00:00.000Z",
-      "2021-09-01T09:00:00.000Z"
+      {
+        "date": "2021-02-12T10:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-04-14T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-09-01T09:00:00.000Z",
+        "participants": 0
+      }
     ],
     "_id": "5c88fa8cf4afda39709c296c",
     "name": "The Wine Taster",
@@ -457,5 +547,61 @@
         "day": 5
       }
     ]
+  },
+  {
+    "_id": "66df0c655a197e35c59607e0",
+    "name": "The Mountain Biker",
+    "duration": 7,
+    "maxGroupSize": 15,
+    "difficulty": "medium",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 6,
+    "price": 497,
+    "summary": "Exploring the jaw-dropping US east coast by foot and by boat",
+    "description": "Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nIrure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    "createdAt": "2024-08-31T13:55:41.730Z",
+    "startDates": [
+      {
+        "date": "2021-02-12T10:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-04-14T09:00:00.000Z",
+        "participants": 0
+      },
+      {
+        "date": "2021-09-01T09:00:00.000Z",
+        "participants": 0
+      }
+    ],
+    "secretTour": false,
+    "startLocation": {
+      "type": "Point",
+      "coordinates": [-80.185942, 25.774772],
+      "address": "301 Biscayne Blvd, Miami, FL 33132, USA",
+      "description": "Miami, USA",
+      "_id": "66d320dd6fdb5ba19b2ed5e2"
+    },
+    "locations": [
+      {
+        "_id": "5c88fa8cf4afda39709c2975",
+        "description": "Yellowknife",
+        "type": "Point",
+        "coordinates": [-114.406097, 62.439943],
+        "day": 1
+      }
+    ],
+    "guides": [
+      "5c8a21f22f8fb814b56fa18a",
+      "5c8a201e2f8fb814b56fa186",
+      "5c8a23412f8fb814b56fa18c"
+    ],
+    "__v": 0,
+    "imageCover": "tour-66df0c655a197e35c59607e0-1725912282191-cover.jpeg",
+    "images": [
+      "tour-66df0c655a197e35c59607e0-1725912282374-2.jpeg",
+      "tour-66df0c655a197e35c59607e0-1725912282373-1.jpeg"
+    ],
+    "slug": "the-mountain-biker"
   }
 ]

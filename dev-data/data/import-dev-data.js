@@ -24,11 +24,12 @@ const reviews = JSON.parse(
 // IMPORT DATA INTO DB
 const importData = async () => {
   const time = Date.now();
+  console.log('Importing data...');
 
   try {
     await Tour.create(tours);
-    await User.create(users);
-    await Review.create(reviews);
+    // await User.create(users);
+    // await Review.create(reviews);
 
     console.log(`Data successfully loaded in ${Date.now() - time} ms`);
   } catch (err) {
