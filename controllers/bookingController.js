@@ -8,15 +8,17 @@ const AppError = require('../utils/appError');
 // Create a booking after a successful checkout
 exports.createBookingAfterPayment = async session => {
   try {
-    const tour = session.metadata.tourId;
+    const { tourId, startDate } = session.metadata;
     const user = (await User.findOne({ email: session.customer_email })).id;
     const price = session.amount_total / 100;
 
-    await Tour.findOneAndUpdate(
-      { _id: tour._id, 'startDates.date': session.metadata.startDate }, // Find the tour by ID and match the specific date
-      { $inc: { 'startDates.$.participants': 1 } } // Increment the participants field of the matched element
+    const tour = await Tour.findById(tourId);
+    const bookedDateIndex = tour.startDates.findIndex(
+      item => item.date.toISOString() === startDate
     );
+    tour.startDates[bookedDateIndex].participants += 1;
 
+    await tour.save();
     await Booking.create({ tour, user, price });
   } catch (error) {
     console.log('FAILED TO CREATE BOOKING', error);
