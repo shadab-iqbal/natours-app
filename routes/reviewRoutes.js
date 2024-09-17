@@ -14,6 +14,7 @@ router
   .post(
     authController.isAuthorized(['user']),
     reviewController.setTourUserIds,
+    reviewController.canReview,
     reviewController.createReview
   );
 
