@@ -5,3 +5,6 @@ Natours is a full-featured tour booking application where users can explore, boo
 _**Postman API Documentation**_:
 
 https://documenter.getpostman.com/view/30692953/2sAXjNXqvu
+
+**N.B**:
+The first request might take upto 1 minute as the site is hosted on the free version of Render.com
