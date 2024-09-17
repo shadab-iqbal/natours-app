@@ -26,8 +26,16 @@ exports.getCheckoutSession = async (req, res, next) => {
 
       // the email of the customer (will be auto-filled on the checkout page)
       customer_email: req.user.email,
+
+      // Use metadata to store additional data
+      // (will be used to create the booking in the webhook)
+      metadata: {
+        tourId: req.params.tourId,
+        startDate: req.params.startDate
+      },
+
       // the client reference ID (will be used to create the booking in the webhook)
-      client_reference_id: req.params.tourId,
+      // client_reference_id: req.params.tourId,
 
       // the details of each product that the user is purchasing
       line_items: [

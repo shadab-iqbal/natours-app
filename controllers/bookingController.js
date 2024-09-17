@@ -8,13 +8,14 @@ const AppError = require('../utils/appError');
 // Create a booking after a successful checkout
 exports.createBookingAfterPayment = async session => {
   try {
-    const tour = session.client_reference_id;
+    const tour = session.metadata.tourId;
     const user = (await User.findOne({ email: session.customer_email })).id;
     const price = session.amount_total / 100;
 
-    await Tour.findByIdAndUpdate(tour, {
-      $inc: { 'startDates.0.participants': 1 }
-    });
+    await Tour.findOneAndUpdate(
+      { _id: tour._id, 'startDates.date': session.metadata.startDate }, // Find the tour by ID and match the specific date
+      { $inc: { 'startDates.$.participants': 1 } } // Increment the participants field of the matched element
+    );
 
     await Booking.create({ tour, user, price });
   } catch (error) {
@@ -52,7 +53,7 @@ exports.checkAvailability = async (req, res, next) => {
     }
 
     const bookedDate = tour.startDates.find(
-      item => item.date.toISOString().split('T')[0] === req.params.startDate
+      item => item.date.toISOString() === req.params.startDate
     );
 
     if (!bookedDate || bookedDate.participants === tour.maxGroupSize) {
@@ -62,7 +63,8 @@ exports.checkAvailability = async (req, res, next) => {
     return next();
 
     // return res.status(200).json({
-    //   data: bookedDate
+    //   data: req.params.startDate,
+    //   test: tour.startDates[0].date
     // });
   } catch (error) {
     return next(error);
