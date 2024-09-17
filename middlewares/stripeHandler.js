@@ -2,7 +2,9 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const Tour = require('../models/tourModel');
-const { createBooking } = require('../controllers/bookingController');
+const {
+  createBookingAfterPayment
+} = require('../controllers/bookingController');
 
 // Create a checkout session for the user to purchase a tour
 // This checkout session will return a session object which
@@ -80,7 +82,7 @@ exports.handleStripeWebhook = async (req, res, next) => {
 
       // Create a booking in the database
       // Async operation so that the webhook doesn't time out
-      createBooking(session);
+      createBookingAfterPayment(session);
     }
 
     // Send a response to acknowledge that the event was received

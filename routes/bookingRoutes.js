@@ -8,7 +8,11 @@ const router = express.Router();
 
 router.use(authController.isAuthenticated);
 
-router.get('/checkout-session/:tourId', stripeHandler.getCheckoutSession);
+router.get(
+  '/checkout-session/:tourId/:startDate',
+  bookingController.checkAvailability,
+  stripeHandler.getCheckoutSession
+);
 
 router.get('/my-booked-tours', bookingController.getMyTours);
 

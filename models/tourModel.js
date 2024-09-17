@@ -175,23 +175,13 @@ tourSchema.post('save', function(doc, next) {
 
 // QUERY MIDDLEWARE: runs for all find queries
 tourSchema.pre(/^find/, function(next) {
-  this.find({ secretTour: { $ne: true } });
-
   this.populate({
     path: 'guides', // Populate the guides field
     select: '-passwordChangedAt -__v' // Exclude the passwordChangedAt and __v fields
   });
 
-  this.start = Date.now();
-
   next();
 });
-
-// tourSchema.post(/^find/, function(docs, next) {
-//   console.log(`\nQuery took ${Date.now() - this.start} milliseconds!\n`);
-
-//   next();
-// });
 
 tourSchema.pre('aggregate', function(next) {
   // Check if the first stage in the pipeline is $geoNear
